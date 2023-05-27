@@ -7,11 +7,11 @@ use anchor_spl::{
     token::{burn, mint_to, Burn, Mint, MintTo, Token, TokenAccount},
 };
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("Ed3wfVH13QRrUXdnntkznQAkX4gvakg2PxDTpDSXik3A");
 
 const PURCHASE_PRICE: u64 = 1;
 const STORE_SEED: &[u8] = b"store";
-// const PAYMENT_MINT: Pubkey = pubkey!("HARDCODED_MINT_ADDRESS");
+// const PAYMENT_MINT: Pubkey = pubkey!("Gw1dRVus1Logbm3zNuJ8c5ae9AjWLK2So73kNUpqcucg");
 
 #[program]
 pub mod store {
@@ -73,7 +73,7 @@ pub struct Buy<'info> {
     pub payment_token_account: Account<'info, TokenAccount>,
     #[account(
         mut,
-        // address = PAYMENT_MINT
+        // address = PAYMENT_MINT // contraint to only allow hardcoded mint address for payment
     )]
     pub payment_mint: Account<'info, Mint>,
     #[account(
