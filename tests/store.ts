@@ -95,14 +95,6 @@ describe("store", () => {
   })
 
   it("Is initialized!", async () => {
-    console.log("storeAuthorityPDA", storeAuthorityPDA.toBase58())
-    console.log("paymentMint", paymentMint.toBase58())
-    console.log("paymentTokenAccount", paymentTokenAccount.toBase58())
-    console.log("purchaseMintOne", purchaseMintOne.toBase58())
-    console.log("purchaseTokenAccountOne", purchaseTokenAccountOne.toBase58())
-    console.log("purchaseMintTwo", purchaseMintTwo.toBase58())
-    console.log("purchaseTokenAccountTwo", purchaseTokenAccountTwo.toBase58())
-
     // Add your test here.
     const tx = await program.methods
       .buy()
@@ -173,13 +165,13 @@ describe("store", () => {
       for (const uri of uris) {
         const fungibleToken = await metaplex.nfts().createSft({
           uri: uri,
-          name: "madlads.s3",
+          name: "madlads.s3.us-west-2",
           sellerFeeBasisPoints: 100,
           updateAuthority: wallet.payer,
           mintAuthority: wallet.payer,
           decimals: 0,
           tokenStandard: 1,
-          symbol: "us-west-2",
+          symbol: "JPEG",
           isMutable: true,
         })
 

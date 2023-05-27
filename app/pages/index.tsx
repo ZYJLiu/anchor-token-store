@@ -1,13 +1,23 @@
-import { Box, Flex, HStack, Spacer } from "@chakra-ui/react"
+import {
+  Box,
+  Flex,
+  HStack,
+  Spacer,
+  Link,
+  VStack,
+  Text,
+  Divider,
+  Button,
+} from "@chakra-ui/react"
 import WalletMultiButton from "@/components/WalletMultiButton"
 import ItemCard from "@/components/ItemCard"
 import { PublicKey } from "@solana/web3.js"
 
 export default function Home() {
   const itemMintAddresses = [
-    new PublicKey("J7vLrZDzFzmsagpWACqQUEg5k3JGRzxQHS1QE8PXTC8X"),
-    new PublicKey("EzgDYGT1u6PcqmLW5nzA42BRHH8tcDFAJKmRxi3dx9PQ"),
-    new PublicKey("CU9pFnUKa7FkxxvQRK8ECKZwLmPaPTvueNccpHKq3gbJ"),
+    new PublicKey("4q8SQQ5sXsRMFKZfP3GRfW21hKsT1qvvHZX8XYZSm5BW"),
+    new PublicKey("D2QDo3BCgwuTENjcFWoffRgBXLm53PajTqqJzeaC7GaB"),
+    new PublicKey("2j5c4hJbP6tFrSAGEBtVayScM4WhKV9ouGUq8U7aGPQQ"),
   ]
 
   return (
@@ -16,6 +26,16 @@ export default function Home() {
         <Spacer />
         <WalletMultiButton />
       </Flex>
+
+      <VStack mb={10}>
+        <Button
+          as={Link}
+          href="https://anchor-token-stake.vercel.app/"
+          isExternal
+        >
+          Click Here To Get Tokens
+        </Button>
+      </VStack>
 
       <HStack justifyContent="center" spacing={4}>
         {itemMintAddresses.map((itemMint, index) => (
