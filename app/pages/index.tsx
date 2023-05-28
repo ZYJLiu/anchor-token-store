@@ -15,9 +15,9 @@ export default function Home() {
   // Mint addresses for the items to display
   // These should have been created already, and the mint authority set as the store authority PDA
   const itemMintAddresses = [
-    new PublicKey("4q8SQQ5sXsRMFKZfP3GRfW21hKsT1qvvHZX8XYZSm5BW"),
-    new PublicKey("D2QDo3BCgwuTENjcFWoffRgBXLm53PajTqqJzeaC7GaB"),
-    new PublicKey("2j5c4hJbP6tFrSAGEBtVayScM4WhKV9ouGUq8U7aGPQQ"),
+    new PublicKey("fYv7DL1cRRjj1h3KtNFhpmHniZF31LNrMBH7MVytUKV"),
+    new PublicKey("9RcpPCkxs3PWT4fP2U64eh6Qgt124i97BREtj9wrgDe1"),
+    new PublicKey("BRxnpHWC9FGCdiZEwKwyWQiRRceaCwjBYum7tRNvqPM9"),
   ]
 
   return (

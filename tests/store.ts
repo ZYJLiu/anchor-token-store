@@ -179,7 +179,7 @@ describe("store", () => {
         // Use metaplex client to create a new fungible token
         const fungibleToken = await metaplex.nfts().createSft({
           uri: uri,
-          name: "madlads.s3.us-west-2",
+          name: "JPEG",
           sellerFeeBasisPoints: 100,
           updateAuthority: wallet.payer,
           mintAuthority: wallet.payer,
