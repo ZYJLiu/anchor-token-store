@@ -20,13 +20,21 @@ describe("store", () => {
   const wallet = anchor.workspace.Store.provider.wallet
   const connection = program.provider.connection
 
+  // Mint address for token accepted by the store as payment
   let paymentMint: PublicKey
+  // User's token account for the paymentMint token
   let paymentTokenAccount: PublicKey
+  // Mint address for token purchased by the user
   let purchaseMintOne: PublicKey
+  // User's token account for the "purchaseMintOne" token
   let purchaseTokenAccountOne: PublicKey
+  // Mint address for token purchased by the user
   let purchaseMintTwo: PublicKey
+  // User's token account for the "purchaseMintTwo" token
   let purchaseTokenAccountTwo: PublicKey
 
+  // PDA for the store authority, used as mint authority for the purchase tokens
+  // Using PDA as mint authority enables minting directly from the program
   const [storeAuthorityPDA] = PublicKey.findProgramAddressSync(
     [Buffer.from("store")],
     program.programId
@@ -50,7 +58,7 @@ describe("store", () => {
       wallet.publicKey // Owner
     )
 
-    // Mint some tokens
+    // Mint some tokens to initially fund the user to pay for the purchase
     await mintTo(
       connection,
       wallet.payer, // Payer
@@ -60,41 +68,40 @@ describe("store", () => {
       100 * 10 ** 2 // Amount, minting 1 token, accounting for decimals (2)
     )
 
-    // Create a mint to test
+    // Create a mint to test, this is an item that the user will purchase
     purchaseMintOne = await createMint(
       connection,
       wallet.payer, // Payer
-      storeAuthorityPDA, // Mint authority
+      storeAuthorityPDA, // Mint authority (set as store authority PDA)
       null, // Freeze authority
       0 // Decimals (no decimals for "semi-fungible" tokens)
     )
 
+    // Create a token account address for the user
+    // This is where the user will receive the purchased tokens
     purchaseTokenAccountOne = getAssociatedTokenAddressSync(
       purchaseMintOne,
       wallet.publicKey
     )
 
-    // Create a mint to test
+    // Create a second mint to test
     purchaseMintTwo = await createMint(
       connection,
       wallet.payer, // Payer
-      storeAuthorityPDA, // Mint authority
+      storeAuthorityPDA, // Mint authority (set as store authority PDA)
       null, // Freeze authority
       0 // Decimals (no decimals for "semi-fungible" tokens)
     )
 
+    // Create a token account address for the user
+    // This is where the user will receive the purchased tokens
     purchaseTokenAccountTwo = getAssociatedTokenAddressSync(
       purchaseMintTwo,
       wallet.publicKey
     )
-
-    purchaseTokenAccountOne = getAssociatedTokenAddressSync(
-      purchaseMintOne,
-      wallet.publicKey
-    )
   })
 
-  it("Is initialized!", async () => {
+  it("Buy First Token", async () => {
     // Add your test here.
     const tx = await program.methods
       .buy()
@@ -122,7 +129,7 @@ describe("store", () => {
     console.log("purchaseTokenbalance", purchaseTokenbalance.value.uiAmount)
   })
 
-  it("Is initialized!", async () => {
+  it("Buy Second Token", async () => {
     // Add your test here.
     const tx = await program.methods
       .buy()
@@ -150,19 +157,26 @@ describe("store", () => {
     console.log("purchaseTokenbalance", purchaseTokenbalance.value.uiAmount)
   })
 
+  // Not used to test program
+  // Just using to create tokens with metadata to test with frontend
   it("Create Multiple Fungible Tokens with Metadata", async () => {
+    // Set up metaplex client
     const metaplex = new Metaplex(connection).use(keypairIdentity(wallet))
 
+    // Test uris
     const uris = [
       "https://madlads.s3.us-west-2.amazonaws.com/json/8566.json",
       "https://madlads.s3.us-west-2.amazonaws.com/json/2382.json",
       "https://madlads.s3.us-west-2.amazonaws.com/json/7592.json",
     ]
 
+    // call helper function
     createMultipleFungibleTokens(uris)
 
+    // Helper function to create multiple fungible tokens
     async function createMultipleFungibleTokens(uris) {
       for (const uri of uris) {
+        // Use metaplex client to create a new fungible token
         const fungibleToken = await metaplex.nfts().createSft({
           uri: uri,
           name: "madlads.s3.us-west-2",
@@ -181,11 +195,11 @@ describe("store", () => {
         // Transfer mint authority to the store authority PDA
         await setAuthority(
           connection,
-          wallet.payer,
-          fungibleToken.mintAddress,
-          wallet.publicKey,
-          AuthorityType.MintTokens,
-          storeAuthorityPDA
+          wallet.payer, // Payer
+          fungibleToken.mintAddress, // Mint
+          wallet.publicKey, // Current authority
+          AuthorityType.MintTokens, // Authority type
+          storeAuthorityPDA // New authority
         )
       }
     }

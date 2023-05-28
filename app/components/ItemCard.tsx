@@ -15,8 +15,11 @@ const ItemCard = ({ purchaseMint }: ItemCardProps) => {
   const { connection } = useConnection()
   const { program } = useProgram()
   const [isLoading, setIsLoading] = useState(false)
+
+  // State variable to hold the metadata for the fungible token
   const [metadata, setMetadata] = useState<Sft>()
 
+  // Mint address of token accepted for payment
   const paymentMint = new PublicKey(
     "Gw1dRVus1Logbm3zNuJ8c5ae9AjWLK2So73kNUpqcucg"
   )
@@ -24,16 +27,22 @@ const ItemCard = ({ purchaseMint }: ItemCardProps) => {
   const handleClick = async () => {
     setIsLoading(true)
 
+    // Get the PDA for the store authority (the mint authority of the purchase token)
+    // This address is only used for the program to "sign" for minting of the purchase token
     const [storeAuthorityPDA] = PublicKey.findProgramAddressSync(
       [Buffer.from("store")],
       program!.programId
     )
 
+    // Get the user's associated token account address for the payment token
+    // Tokens burn from this account
     const paymentTokenAccount = getAssociatedTokenAddressSync(
       paymentMint,
       publicKey!
     )
 
+    // Get the user's associated token account address for the purchase token
+    // Token minted to this account, this account is created if it doesn't exist
     const purchaseTokenAccountOne = getAssociatedTokenAddressSync(
       purchaseMint,
       publicKey!
@@ -61,6 +70,8 @@ const ItemCard = ({ purchaseMint }: ItemCardProps) => {
     }
   }
 
+  // Use metaplex to fetch the metadata for the fungible token
+  // This is used to display the image of the token, but additional metadata is also available
   useEffect(() => {
     const fetchMetadata = async () => {
       const metaplex = new Metaplex(connection)

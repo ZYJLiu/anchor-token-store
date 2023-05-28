@@ -35,6 +35,7 @@ export const ProgramProvider = ({
   // State variable to hold the program values
   const [program, setProgram] = useState<Program<Store> | null>(null)
 
+  // Anchor program setup
   const setup = useCallback(async () => {
     const programId = new PublicKey(
       "Ed3wfVH13QRrUXdnntkznQAkX4gvakg2PxDTpDSXik3A"
@@ -47,7 +48,6 @@ export const ProgramProvider = ({
     setProgram(program)
   }, [connection, wallet])
 
-  // Effect to setup program when the component mounts
   useEffect(() => {
     setup()
   }, [setup])

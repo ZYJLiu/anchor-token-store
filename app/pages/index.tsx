@@ -5,8 +5,6 @@ import {
   Spacer,
   Link,
   VStack,
-  Text,
-  Divider,
   Button,
 } from "@chakra-ui/react"
 import WalletMultiButton from "@/components/WalletMultiButton"
@@ -14,6 +12,8 @@ import ItemCard from "@/components/ItemCard"
 import { PublicKey } from "@solana/web3.js"
 
 export default function Home() {
+  // Mint addresses for the items to display
+  // These should have been created already, and the mint authority set as the store authority PDA
   const itemMintAddresses = [
     new PublicKey("4q8SQQ5sXsRMFKZfP3GRfW21hKsT1qvvHZX8XYZSm5BW"),
     new PublicKey("D2QDo3BCgwuTENjcFWoffRgBXLm53PajTqqJzeaC7GaB"),
@@ -27,6 +27,7 @@ export default function Home() {
         <WalletMultiButton />
       </Flex>
 
+      {/* Display Button which redirects to token staking frontend to get tokens */}
       <VStack mb={10}>
         <Button
           as={Link}
@@ -37,6 +38,7 @@ export default function Home() {
         </Button>
       </VStack>
 
+      {/* Display the items available for purchase */}
       <HStack justifyContent="center" spacing={4}>
         {itemMintAddresses.map((itemMint, index) => (
           <ItemCard key={index} purchaseMint={itemMint} />
